@@ -14,7 +14,7 @@ import re
 import requests
 import random
 
-reDict = {'TSLA' : r'(\bт[еэ]сл.{1,2}\b|\bte?sla.{0,1}\b)', 'SBER.ME' : r'(\bсбер[ -]?банк.{0,2}\b|\bсбер.{0,2}\b)'}
+reDict = {'TSLA' : r'(\bт[еэ]сл.{1,2}\b|\bte?sla.{0,1}\b)', 'SBER.ME' : r'(\bсбер[ -]?банк.{0,2}\b|\bсбер.{0,2}\b)', 'GAZP.ME' : r'(\bгаз[ -]?пром.{0,2}\b|\bgaz[ -]?p.{0,3}\b)', 'LKOH.ME' : r'(\bлуко[йи]л.{0,2}\b|\blukoil.{0,2}\b|\blkoh\b)', 'VTBR.ME' : r'(\bвтб.{0,2}\b|\bvtb.{0,2}\b)', 'ROSN.ME' : r'(\bроснефт.{0,2}\b)', 'GMKN.ME' : r'(\bнор.*[ -]?никел.{1,3}\b|\bgmkn\b)', 'CHMF.ME' : r'(\bсеверстал.{0,2}\b|\bchmf\b)', 'YNDX.ME' : r'(\bяндекс.{0,2}\b|\by[a]?nd[e]?x\b)', 'SNGSP.ME' : r'(\bсургут[ -]?нефте[ -]?газ.{0,2}\b)', 'MGNT.ME' : r'(\bмагнит.{0,2}\b|\bm[a]?gn[i]?t\b)'}
 
 
 logging.basicConfig(level=logging.DEBUG)
