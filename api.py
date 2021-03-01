@@ -82,23 +82,6 @@ def handle_dialog(req, res):
                 res['response']['text'] = 'С сервером неполадочка... Вернусь в скором времени!'
             return
 
-'''    if req['state']['session']['city'] and req['request']['original_utterance'].lower() in [
-        'подробнее', 'подробно', 'еще', 'ещё', 'больше'
-    ]:
-        params = {
-          'access_key': '3af61219c67daf3a9bbc914733fdb090',
-          'query': req['state']['session']['city']
-        }
-        api_result = requests.get('http://api.weatherstack.com/current', params)
-        api_response = api_result.json()
-        if api_response:
-            wind_speed = str(int(round(api_response['current']['wind_speed'] * 1000 / 3600)))
-            res['response']['text'] = 'Скорость ветра ' + wind_speed + ' м/с, ' + 'влажность ' + str(api_response['current']['humidity']) + '%.'
-        else:
-            res['response']['text'] = 'С сервером неполадочка... Вернусь в скором времени!'
-        res['session_state']['city'] = req['state']['session']['city']
-        return
-'''
     if req['request']['original_utterance'].lower() in [
         'помощь',
         'что ты умеешь',
