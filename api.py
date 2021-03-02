@@ -75,7 +75,7 @@ def handle_dialog(req, res):
                 regularMarketPrice = api_response['quoteSummary']['result'][0]['price']['regularMarketPrice']['fmt']
                 currency = api_response['quoteSummary']['result'][0]['price']['currencySymbol']
 
-                res['response']['text'] = 'Сейчас стоимость акций ' + i.split('.')[0] +  " " + regularMarketPrice + " " + currency + "."
+                res['response']['text'] = 'Сейчас стоимость акций ' + i.split('.')[0] +  " " + regularMarketPrice + " " + currency
                 res['response']['buttons'] = [{'title': "Подробнее", 'hide': True}]
                 res['session_state']['city'] = i
             else:
