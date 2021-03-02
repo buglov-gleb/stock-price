@@ -14,7 +14,7 @@ import re
 import requests
 import random
 
-reDict = {'TSLA' : r'(\bт[еэ]сл.{1,2}\b|\bte?sla.{0,1}\b)', 'SBER.ME' : r'(\bсбер[ -]?банк.{0,2}\b|\bсбер.{0,2}\b|\bSBER.*\b)', 'GAZP.ME' : r'(\bгаз[ -]?пром.{0,2}\b|\bgaz[ -]?p.{0,3}\b)', 'LKOH.ME' : r'(\bлуко[йи]л.{0,2}\b|\blukoil.{0,2}\b|\blkoh\b|\blkoh\.me\b)', 'VTBR.ME' : r'(\bвтб.{0,2}\b|\bvtb.{0,2}\b|\bVTBR\.ME\b)', 'ROSN.ME' : r'(\bроснефт.{0,2}\b|\brosn.*\b|\bROSN\.ME\b)', 'GMKN.ME' : r'(\bнор.*[ -]?никел.{1,3}\b|\bgmkn\b|\bGMKN\.ME\b)', 'CHMF.ME' : r'(\bсеверстал.{0,2}\b|\bchmf\b|\bCHMF\.ME\b)', 'YNDX.ME' : r'(\bяндекс.{0,2}\b|\by[a]?nd[e]?x\b|\bYNDX\.ME\b)', 'SNGSP.ME' : r'(\bсургут[ -]?нефте[ -]?газ.{0,2}\b|\bSNGSP\.ME\b)', 'MGNT.ME' : r'(\bмагнит.{0,2}\b|\bm[a]?gn[i]?t\b|\bMGNT\.ME\b)', 'TATN.ME' : r'(\bтат[ -]?нефт.{0,2}\b|\btatn.*\b|\bTATN\.ME\b)', 'TRNFP.ME' : r'(\bтранс[ -]?нефт.{0,2}\b|\btrnfp\b|\btrans[ -]?neft\b|\bTRNFP\.ME\b)', 'OZON.ME' : r'(\bозон.{0,2}\b|\bozon.{0,2}\b|\bOZON\.ME\b)', 'TCSG.ME' : r'(\bтинько.{1,3}\b|\btinkoff.{0,2}\b|\bTCS[g]\b|\bTCSG\.me\b)', 'MAIL.ME' : r'(\bмэ[ий]л.{0,2}\b|\bmail[\.]?.{0,2}\b|\bMAIL\.ME\b)'}
+reDict = {'TSLA' : r'(\bт[еэ]сл.{1,2}\b|\bte?sla.{0,1}\b)', 'SBER.ME' : r'(\bсбер[ -]?банк.{0,2}\b|\bсбер.{0,2}\b|\bSBER.*\b)', 'GAZP.ME' : r'(\bгаз[ -]?пром.{0,2}\b|\bgaz[ -]?p.{0,3}\b)', 'LKOH.ME' : r'(\bлуко[йи]л.{0,2}\b|\blukoil.{0,2}\b|\blkoh\b|\blkoh\.me\b)', 'VTBR.ME' : r'(\bвтб.{0,2}\b|\bvtb.{0,2}\b|\bVTBR\.ME\b)', 'ROSN.ME' : r'(\bроснефт.{0,2}\b|\brosn.*\b|\bROSN\.ME\b)', 'GMKN.ME' : r'(\bнор.*[ -]?никел.{1,3}\b|\bgmkn\b|\bGMKN\.ME\b)', 'CHMF.ME' : r'(\bсеверстал.{0,2}\b|\bchmf\b|\bCHMF\.ME\b)', 'YNDX.ME' : r'(\bяндекс.{0,2}\b|\by[a]?nd[e]?x\b|\bYNDX\.ME\b)', 'SNGSP.ME' : r'(\bсургут[ -]?нефте[ -]?газ.{0,2}\b|\bSNGSP\.ME\b)', 'MGNT.ME' : r'(\bмагнит.{0,2}\b|\bm[a]?gn[i]?t\b|\bMGNT\.ME\b)', 'TATN.ME' : r'(\bтат[ -]?нефт.{0,2}\b|\btatn.*\b|\bTATN\.ME\b)', 'TRNFP.ME' : r'(\bтранс[ -]?нефт.{0,2}\b|\btrnfp\b|\btrans[ -]?neft\b|\bTRNFP\.ME\b)', 'OZON.ME' : r'(\bозон.{0,2}\b|\bozon.{0,2}\b|\bOZON\.ME\b)', 'TCSG.ME' : r'(\bтинько.{1,3}\b|\btinkoff.{0,2}\b|\bTCS[g]\b|\bTCSG\.me\b)', 'MAIL.ME' : r'(\bмэ[ий]л.{0,2}\b|\bmail[\.]?.{0,2}\b|\bMAIL\.ME\b)', 'AAPL' : r'(\bэп[п]?л.{0,2}\b|\bap[p]?le\b|\bяблок.{1,2}\b\bAAPL\b)', 'AMZN' : r'(\bамазон.{0,2}\b|\bamazo.{1,2}\b|\bAMZN\b)', 'ALRS.ME' : r'(\bALROS.{1,2}\b|\bалрос.{1,2}\b|\bALRS\.ME\b)', 'GME' : r'(\bgame[ -]?stop.{0,1}\b|\bгейм[ -]?стоп.{0,2}\b)'}
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -36,7 +36,7 @@ def main():
             "end_session": False
         },
         "session_state": {
-            "city": False
+            "stock": False
         }
     }
 
@@ -74,10 +74,10 @@ def handle_dialog(req, res):
                 api_response = json.loads(api_result.content.decode('utf-8'))
                 regularMarketPrice = api_response['quoteSummary']['result'][0]['price']['regularMarketPrice']['fmt']
                 currency = api_response['quoteSummary']['result'][0]['price']['currencySymbol']
-                companyName = api_response['quoteSummary']['result'][0]['price']['longName']
+                companyName = api_response['quoteSummary']['result'][0]['price']['shortName']
                 res['response']['text'] = 'Сейчас стоимость акций ' + companyName +  " " + regularMarketPrice + " " + currency
                 res['response']['buttons'] = [{'title': "Подробнее", 'hide': True}]
-                res['session_state']['city'] = i
+                res['session_state']['stock'] = i
             else:
                 res['response']['text'] = 'С сервером неполадочка... Вернусь в скором времени!'
             return
@@ -92,14 +92,14 @@ def handle_dialog(req, res):
         }
         res['response']['text'] = 'Я умею всего-ничего, подсказывать стоимость акций!'
         res['response']['buttons'] = get_suggests(user_id)
-        #res['session_state']['city'] = req['state']['session']['city']
+        #res['session_state']['stock'] = req['state']['session']['stock']
         return
 
     # Если нет, то убеждаем его купить слона!
     res['response']['text'] = 'Все говорят "%s", а ты купи GameStop!' % (
         req['request']['original_utterance']
     )
-    #res['session_state']['city'] = req['state']['session']['city']
+    #res['session_state']['stock'] = req['state']['session']['stock']
 
 # Функция возвращает две подсказки для ответа.
 def get_suggests(user_id):
@@ -127,5 +127,5 @@ def get_suggests(user_id):
     return suggests
 
 def get_random_stock(user_id):
-    randomStocks = random.sample(list(reDict.keys()), 2)
+    randomStocks = random.sample(list(key.split('.')[0] for key in reDict.keys()), 2)
     return randomStocks
