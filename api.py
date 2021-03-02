@@ -69,13 +69,13 @@ def handle_dialog(req, res):
     # Обрабатываем ответ пользователя.
     for i in reDict:
         if re.search(reDict[i], req['request']['original_utterance'], re.IGNORECASE):
-            api_result = requests.get('https://query1.finance.yahoo.com/v10/finance/quoteSummary/' + i.split('.')[0] + '?modules=price')
+            api_result = requests.get('https://query1.finance.yahoo.com/v10/finance/quoteSummary/' + i + '?modules=price')
             if api_result:
                 api_response = json.loads(api_result.content.decode('utf-8'))
-                regularMarketPrice = api_response['quoteSummary']['result'][0]['price']['regularMarketPrice']["fmt"]
+                regularMarketPrice = api_response['quoteSummary']['result'][0]['price']['regularMarketPrice']['fmt']
                 currency = api_response['quoteSummary']['result'][0]['price']['currencySymbol']
 
-                res['response']['text'] = 'Сейчас стоимость акций ' + i +  " " + regularMarketPrice + " " + currency + "."
+                res['response']['text'] = 'Сейчас стоимость акций ' + i.split('.')[0] +  " " + regularMarketPrice + " " + currency + "."
                 res['response']['buttons'] = [{'title': "Подробнее", 'hide': True}]
                 res['session_state']['city'] = i
             else:
