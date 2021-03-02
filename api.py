@@ -14,7 +14,7 @@ import re
 import requests
 import random
 
-reDict = {'TSLA' : r'(\bт[еэ]сл.{1,2}\b|\bte?sla.{0,1}\b)', 'SBER.ME' : r'(\bсбер[ -]?банк.{0,2}\b|\bсбер.{0,2}\b)', 'GAZP.ME' : r'(\bгаз[ -]?пром.{0,2}\b|\bgaz[ -]?p.{0,3}\b)', 'LKOH.ME' : r'(\bлуко[йи]л.{0,2}\b|\blukoil.{0,2}\b|\blkoh\b)', 'VTBR.ME' : r'(\bвтб.{0,2}\b|\bvtb.{0,2}\b)', 'ROSN.ME' : r'(\bроснефт.{0,2}\b)', 'GMKN.ME' : r'(\bнор.*[ -]?никел.{1,3}\b|\bgmkn\b)', 'CHMF.ME' : r'(\bсеверстал.{0,2}\b|\bchmf\b)', 'YNDX.ME' : r'(\bяндекс.{0,2}\b|\by[a]?nd[e]?x\b)', 'SNGSP.ME' : r'(\bсургут[ -]?нефте[ -]?газ.{0,2}\b)', 'MGNT.ME' : r'(\bмагнит.{0,2}\b|\bm[a]?gn[i]?t\b)', 'TATN.ME' : r'(\bтат[ -]?нефт.{0,2}\b|\btatn.*\b)', 'TRNFP.ME' : r'(\bтранс[ -]?нефт.{0,2}\b|\btrnfp\b|\btrans[ -]?neft\b)', 'OZON.ME' : r'(\bозон.{0,2}\b|\bozon.{0,2}\b)', 'TCSG.ME' : r'(\bтинько.{1,3}\b|\btinkoff.{0,2}\b|\bTCS.*\b)', 'MAIL.ME' : r'(\bмэ[ий]л.{0,2}\b|\bmail[\.]?.{0,2}\b)'}
+reDict = {'TSLA' : r'(\bт[еэ]сл.{1,2}\b|\bte?sla.{0,1}\b)', 'SBER.ME' : r'(\bсбер[ -]?банк.{0,2}\b|\bсбер.{0,2}\b|\bSBER.*\b)', 'GAZP.ME' : r'(\bгаз[ -]?пром.{0,2}\b|\bgaz[ -]?p.{0,3}\b)', 'LKOH.ME' : r'(\bлуко[йи]л.{0,2}\b|\blukoil.{0,2}\b|\blkoh\b|\blkoh\.me\b)', 'VTBR.ME' : r'(\bвтб.{0,2}\b|\bvtb.{0,2}\b|\bVTBR\.ME\b)', 'ROSN.ME' : r'(\bроснефт.{0,2}\b|\brosn.*\b|\bROSN\.ME\b)', 'GMKN.ME' : r'(\bнор.*[ -]?никел.{1,3}\b|\bgmkn\b|\bGMKN\.ME\b)', 'CHMF.ME' : r'(\bсеверстал.{0,2}\b|\bchmf\b|\bCHMF\.ME\b)', 'YNDX.ME' : r'(\bяндекс.{0,2}\b|\by[a]?nd[e]?x\b|\bYNDX\.ME\b)', 'SNGSP.ME' : r'(\bсургут[ -]?нефте[ -]?газ.{0,2}\b|\bSNGSP\.ME\b)', 'MGNT.ME' : r'(\bмагнит.{0,2}\b|\bm[a]?gn[i]?t\b|\bMGNT\.ME\b)', 'TATN.ME' : r'(\bтат[ -]?нефт.{0,2}\b|\btatn.*\b|\bTATN\.ME\b)', 'TRNFP.ME' : r'(\bтранс[ -]?нефт.{0,2}\b|\btrnfp\b|\btrans[ -]?neft\b|\bTRNFP\.ME\b)', 'OZON.ME' : r'(\bозон.{0,2}\b|\bozon.{0,2}\b|\bOZON\.ME\b)', 'TCSG.ME' : r'(\bтинько.{1,3}\b|\btinkoff.{0,2}\b|\bTCS[g]\b|\bTCSG\.me\b)', 'MAIL.ME' : r'(\bмэ[ий]л.{0,2}\b|\bmail[\.]?.{0,2}\b|\bMAIL\.ME\b)'}
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -74,8 +74,8 @@ def handle_dialog(req, res):
                 api_response = json.loads(api_result.content.decode('utf-8'))
                 regularMarketPrice = api_response['quoteSummary']['result'][0]['price']['regularMarketPrice']['fmt']
                 currency = api_response['quoteSummary']['result'][0]['price']['currencySymbol']
-
-                res['response']['text'] = 'Сейчас стоимость акций ' + i.split('.')[0] +  " " + regularMarketPrice + " " + currency
+                companyName = api_response['quoteSummary']['result'][0]['price']['longName']
+                res['response']['text'] = 'Сейчас стоимость акций ' + companyName +  " " + regularMarketPrice + " " + currency
                 res['response']['buttons'] = [{'title': "Подробнее", 'hide': True}]
                 res['session_state']['city'] = i
             else:
