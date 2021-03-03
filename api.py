@@ -85,7 +85,7 @@ def handle_dialog(req, res):
     if req['state']['session']['stock'] and req['request']['original_utterance'].lower() in [
         'рекомендации', 'рекомендуешь', 'еще', 'ещё', 'больше', 'рекомендовать'
     ]:
-        api_result = requests.get('https://query1.finance.yahoo.com/v10/finance/quoteSummary/' + req['state']['session']['stock'] + '?modules=price')
+        api_result = requests.get('https://query1.finance.yahoo.com/v10/finance/quoteSummary/' + req['state']['session']['stock'] + '?modules=recommendationTrend')
         if api_result:
             api_response = json.loads(api_result.content.decode('utf-8'))
             strongBuy = str(api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['strongBuy'])
