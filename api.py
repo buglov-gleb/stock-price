@@ -82,9 +82,7 @@ def handle_dialog(req, res):
                 res['response']['text'] = 'С сервером неполадочка... Вернусь в скором времени!'
             return
 
-    if req['state']['session']['stock'] and req['request']['original_utterance'].lower() in [
-        'рекомендации', 'рекомендуешь', 'еще', 'ещё', 'больше', 'рекомендовать'
-    ]:
+    if req['state']['session']['stock'] and any(x in ['рекомендации', 'рекомендуешь', 'еще', 'ещё', 'больше', 'рекомендовать'] for x in req['request']['original_utterance'].lower().split(' ')):
         api_result = requests.get('https://query1.finance.yahoo.com/v10/finance/quoteSummary/' + req['state']['session']['stock'] + '?modules=recommendationTrend')
         if api_result:
             api_response = json.loads(api_result.content.decode('utf-8'))
