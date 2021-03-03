@@ -94,7 +94,7 @@ def handle_dialog(req, res):
             sell = str(api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][1]['sell'])
             strongSell = str(api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][1]['strongSell'])
 
-            res['response']['text'] = 'Рекомендации для акции ' + req['state']['session']['stock'].split('.')[0] + '\nАктивно покупать:' + strongBuy + '\nПокупать:' + buy + '\nДержать:' + hold + '\nПродавать:' + sell + '\nАктивно продавать:' + strongSell
+            res['response']['text'] = 'Рекомендации для акции ' + req['state']['session']['stock'].split('.')[0] + '\nАктивно покупать: ' + strongBuy + '\nПокупать: ' + buy + '\nДержать: ' + hold + '\nПродавать: ' + sell + '\nАктивно продавать: ' + strongSell
         else:
             res['response']['text'] = 'С сервером неполадочка... Вернусь в скором времени!'
         res['session_state']['stock'] = req['state']['session']['stock']
