@@ -72,7 +72,7 @@ def handle_dialog(req, res):
             api_result = requests.get('https://query1.finance.yahoo.com/v10/finance/quoteSummary/' + i + '?modules=price')
             if api_result:
                 api_response = json.loads(api_result.content.decode('utf-8'))
-                regularMarketPrice = api_response['quoteSummary']['result'][0]['price']['regularMarketPrice']['fmt']
+                regularMarketPrice = api_response['quoteSummary']['result'][0]['price']['regularMarketPrice']['raw']
                 currency = api_response['quoteSummary']['result'][0]['price']['currencySymbol']
                 companyName = api_response['quoteSummary']['result'][0]['price']['shortName']
                 res['response']['text'] = 'Сейчас стоимость акций ' + companyName +  " " + regularMarketPrice + " " + currency
