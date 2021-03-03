@@ -88,11 +88,11 @@ def handle_dialog(req, res):
         api_result = requests.get('https://query1.finance.yahoo.com/v10/finance/quoteSummary/' + req['state']['session']['stock'] + '?modules=price')
         if api_result:
             api_response = json.loads(api_result.content.decode('utf-8'))
-            strongBuy = api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['strongBuy']
-            buy = api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['buy']
-            hold = api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['hold']
-            sell = api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['sell']
-            strongSell = api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['strongSell']
+            strongBuy = str(api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['strongBuy'])
+            buy = str(api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['buy'])
+            hold = str(api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['hold'])
+            sell = str(api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['sell'])
+            strongSell = str(api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['strongSell'])
 
             res['response']['text'] = 'Рекомендации для акции ' + req['state']['session']['stock'].split('.')[0] + "\n" + 
             'Активно покупать:' + strongBuy + "\n" + 
@@ -100,6 +100,7 @@ def handle_dialog(req, res):
             'Держать:' + hold + "\n" + 
             'Продавать:' + sell + "\n" + 
             'Активно продавать:' + strongSell + "\n"
+            res['response']['text'] = 'Рекомендации для акции ' + s.split('.')[0] + '\nАктивно покупать:' + strongBuy + '\nПокупать:' + buy + '\nДержать:' + hold + '\nПродавать:' + sell + '\nАктивно продавать:' + strongSell
         else:
             res['response']['text'] = 'С сервером неполадочка... Вернусь в скором времени!'
         res['session_state']['stock'] = req['state']['session']['stock']
