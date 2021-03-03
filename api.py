@@ -76,11 +76,34 @@ def handle_dialog(req, res):
                 currency = api_response['quoteSummary']['result'][0]['price']['currencySymbol']
                 companyName = api_response['quoteSummary']['result'][0]['price']['shortName']
                 res['response']['text'] = 'Сейчас стоимость акций ' + companyName +  " " + regularMarketPrice + " " + currency
-                res['response']['buttons'] = [{'title': "Подробнее", 'hide': True}]
+                res['response']['buttons'] = [{'title': "Рекомендации", 'hide': True}]
                 res['session_state']['stock'] = i
             else:
                 res['response']['text'] = 'С сервером неполадочка... Вернусь в скором времени!'
             return
+
+    if req['state']['session']['stock'] and req['request']['original_utterance'].lower() in [
+        'рекомендации', 'рекомендуешь', 'еще', 'ещё', 'больше', 'рекомендовать'
+    ]:
+        api_result = requests.get('https://query1.finance.yahoo.com/v10/finance/quoteSummary/' + req['state']['session']['stock'] + '?modules=price')
+        if api_result:
+            api_response = json.loads(api_result.content.decode('utf-8'))
+            strongBuy = api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['strongBuy']
+            buy = api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['buy']
+            hold = api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['hold']
+            sell = api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['sell']
+            strongSell = api_response['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]['strongSell']
+
+            res['response']['text'] = 'Рекомендации для акции ' + req['state']['session']['stock'].split('.')[0] +  "\n" + 
+                                      'Активно покупать:' + strongBuy + "\n" + 
+                                      'Покупать:' + buy + "\n" + 
+                                      'Держать:' + hold + "\n" + 
+                                      'Продавать:' + sell + "\n" + 
+                                      'Активно продавать:' + strongSell + "\n"
+        else:
+            res['response']['text'] = 'С сервером неполадочка... Вернусь в скором времени!'
+        res['session_state']['stock'] = req['state']['session']['stock']
+        return
 
     if req['request']['original_utterance'].lower() in [
         'помощь',
@@ -90,16 +113,16 @@ def handle_dialog(req, res):
         sessionStorage[user_id] = {
             'suggests': get_random_stock(user_id)
         }
-        res['response']['text'] = 'Я умею всего-ничего, подсказывать стоимость акций!'
+        res['response']['text'] = 'Я могу подсказать вам стоимость акций, а также сообщить по ним текущие рекомендации'
         res['response']['buttons'] = get_suggests(user_id)
-        #res['session_state']['stock'] = req['state']['session']['stock']
+        res['session_state']['stock'] = req['state']['session']['stock']
         return
 
     # Если нет, то убеждаем его купить слона!
     res['response']['text'] = 'Все говорят "%s", а ты купи GameStop!' % (
         req['request']['original_utterance']
     )
-    #res['session_state']['stock'] = req['state']['session']['stock']
+    res['session_state']['stock'] = req['state']['session']['stock']
 
 # Функция возвращает две подсказки для ответа.
 def get_suggests(user_id):
@@ -114,15 +137,6 @@ def get_suggests(user_id):
     # Убираем первую подсказку, чтобы подсказки менялись каждый раз.
     session['suggests'] = session['suggests'][2:]
     sessionStorage[user_id] = session
-
-    # Если осталась только одна подсказка, предлагаем подсказку
-    # со ссылкой на Яндекс.Маркет.
-#    if len(suggests) < 2:
-#        suggests.append({
-#            "title": "Холодновато!",
-#            "url": "https://thenorthface.com",
-#            "hide": True
-#        })
 
     return suggests
 
